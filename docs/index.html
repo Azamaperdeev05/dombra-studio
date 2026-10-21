@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Қазақ домбырасының 40 нотасының акустикалық талдауы: интонация, шу, деңгей, өшу, тембр, спектрограммалар және түзетуге дейін/кейін тыңдау. Dombra Studio free sample library analysis.">
+<style>body{margin:0}</style>
+</head>
+<body>
+<title>Домбыра дыбыс талдауы</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+/* Layout: a studio session sheet — one reading column, charts break out to full width, a fretboard picks the note. */
+:root {
+  --bg: #f1efea; --panel: #fbfaf7; --ink: #1d1916; --muted: #6b625a; --line: #d9d3ca;
+  --teal: #0b6f73; --wood: #a8641f; --plum: #6c4a92;
+  --ok: #2f7d3b; --warn: #a86a00; --bad: #b3261e;
+  --display: "Literata", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15120f; --panel: #1e1a16; --ink: #ece6dd; --muted: #a59a8e; --line: #3a332c;
+  --teal: #4cc0bd; --wood: #e0a45a; --plum: #b394dd; --ok: #6cc47a; --warn: #e3a53b; --bad: #f07a70; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15120f; --panel: #1e1a16; --ink: #ece6dd; --muted: #a59a8e; --line: #3a332c;
+  --teal: #4cc0bd; --wood: #e0a45a; --plum: #b394dd; --ok: #6cc47a; --warn: #e3a53b; --bad: #f07a70; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font: 16px/1.6 var(--body); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 40px 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 56px; }
+.prose { max-width: 68ch; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(30px, 5vw, 48px); letter-spacing: -0.01em; }
+h2 { font-size: clamp(22px, 3vw, 30px); }
+h3 { font-size: 18px; font-weight: 500; }
+p { margin: 0; }
+section { display: grid; gap: 18px; min-width: 0; }
+.eyebrow { font: 600 12px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); }
+.lede { font-size: 18px; color: var(--muted); max-width: 64ch; }
+header { display: grid; gap: 16px; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 20px; min-width: 0; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th { text-align: left; font: 600 11px/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 0 12px 10px 0; border-bottom: 1px solid var(--line); }
+td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+td:first-child { font-weight: 600; white-space: nowrap; }
+.chip { display: inline-block; font: 600 11px/1 var(--mono); letter-spacing: 0.06em; padding: 5px 8px; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; }
+.chip.bad { color: var(--bad); } .chip.warn { color: var(--warn); } .chip.ok { color: var(--ok); } .chip.info { color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); }
+.legend i { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+.chart { width: 100%; min-width: 0; }
+.chart svg { display: block; overflow: visible; }
+.chart text { fill: var(--muted); font: 11px var(--mono); }
+.chart .domain, .chart .tick line { stroke: var(--line); }
+.chart .grid line { stroke: var(--line); stroke-dasharray: 2 3; }
+.cap { font-size: 13.5px; color: var(--muted); max-width: 72ch; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+#tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--bg); font: 12px/1.45 var(--mono); padding: 7px 9px; border-radius: 4px; max-width: 260px; z-index: 20; }
+/* fretboard */
+.fretboard { display: grid; gap: 6px; min-width: 760px; }
+.string { display: grid; grid-template-columns: 112px repeat(20, 1fr); gap: 3px; align-items: stretch; }
+.string > span { font-size: 12.5px; color: var(--muted); align-self: center; }
+.fret { font: 500 11.5px/1.2 var(--mono); border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 3px; padding: 6px 0; cursor: pointer; display: grid; gap: 2px; text-align: center; }
+.fret small { font-size: 10px; color: var(--muted); }
+.fret:hover { border-color: var(--teal); }
+.fret[aria-pressed="true"] { background: var(--teal); color: var(--bg); border-color: var(--teal); }
+.fret[aria-pressed="true"] small { color: var(--bg); }
+.fret:focus-visible, button:focus-visible, select:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+.frets-n { display: grid; grid-template-columns: 112px repeat(20, 1fr); gap: 3px; font: 10px var(--mono); color: var(--muted); text-align: center; }
+.compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.compare figure { margin: 0; display: grid; gap: 8px; min-width: 0; }
+.compare figcaption { font: 600 12px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.compare img { width: 100%; border-radius: 4px; display: block; }
+audio { width: 100%; height: 36px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px 20px; }
+.stats div { display: grid; gap: 2px; }
+.stats dt { font-size: 12px; color: var(--muted); }
+.stats dd { margin: 0; font: 600 15px var(--mono); font-variant-numeric: tabular-nums; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.seg button { font: 500 13px var(--body); background: var(--panel); color: var(--ink); border: 0; padding: 7px 14px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+ol.plan, ul.plan { margin: 0; padding-left: 20px; display: grid; gap: 10px; max-width: 72ch; }
+.listen { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.listen .panel { display: grid; gap: 10px; }
+.listen h3 { font-size: 16px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Dombra Studio · акустикалық талдау</div>
+    <h1>Домбыраның 40 нотасы: не естіледі, не түзетілді</h1>
+    <p class="lede">Бастапқы жазбаларды өлшедік: әр перненің нақты биіктігін, шуды, деңгейлерді, өшуді және тембрді. Төменде әр ақаудың өлшемі, библиотекада не істелгені, ал түзету мүмкін болмаған жерде келесі жазба сессиясында не істеу керегі жазылған.</p>
+    <dl class="stats panel">
+      <div><dt>Нота</dt><dd class="num">40 + шанақ</dd></div>
+      <div><dt>Ішектер</dt><dd class="num">C3 · F3 (кварта)</dd></div>
+      <div><dt>Бастапқы формат</dt><dd class="num">AAC 64 kbps, моно</dd></div>
+      <div><dt>Диапазон</dt><dd class="num">C3–C5 → A2–E5</dd></div>
+      <div><dt>Round-robin</dt><dd class="num">1 → 3</dd></div>
+    </dl>
+  </header>
+
+  <section id="verdict">
+    <h2>Қорытынды</h2>
+    <div class="panel scroll">
+      <table>
+        <thead><tr><th>Мәселе</th><th>Өлшенгені</th><th>Деңгейі</th><th>Библиотекада</th></tr></thead>
+        <tbody>
+          <tr><td>Интонация</td><td>Барлық нота төмен: <span class="num" id="s-cents"></span>. Үстіңгі ішектің 15–16 пернелері әсіресе төмен.</td><td><span class="chip bad">СЫНИ</span></td><td>Әр нота A=440-қа бапталды, қате <span class="num" id="s-after"></span></td></tr>
+          <tr><td>Гуіл және DC</td><td>Шу едені орта есеппен <span class="num" id="s-noise"></span>. Соңындағы энергияның <span class="num" id="s-lf"></span> бөлігі 80 Гц-тен төмен жатыр.</td><td><span class="chip bad">СЫНИ</span></td><td>30 Гц HPF, нөлдік фаза: шу едені <span class="num" id="s-noise2"></span></td></tr>
+          <tr><td>0 dBFS-тен асу</td><td>AAC декодері шыңды <span class="num" id="s-over"></span> дейін асырады. Бүтін санды WAV-қа жазғанда бұл клиппинг береді.</td><td><span class="chip warn">ЕСКЕРТУ</span></td><td>Әр файл −1 dBFS-ке нормаланды, енді клиппинг жоқ</td></tr>
+          <tr><td>Кесілген соңы</td><td>Файлдар табиғи өшу аяқталмай, <span class="num" id="s-tail"></span> деңгейде бітеді.</td><td><span class="chip warn">ЕСКЕРТУ</span></td><td>Гармоникалар бойынша ресинтез −70 дБ-ге дейін, ұзындығы <span class="num" id="s-len"></span></td></tr>
+          <tr><td>Деңгейлердің шашырауы</td><td>Ноталардың RMS айырмашылығы <span class="num" id="s-rms"></span> дейін жетеді.</td><td><span class="chip warn">ЕСКЕРТУ</span></td><td>Тым қатты ноталар ғана −12 дБ-ге дейін түсірілді. Тыныш ноталар көтерілмеді, себебі ол үшін шертпені лимитермен сығу керек болар еді</td></tr>
+          <tr><td>Басындағы үнсіздік</td><td>Пернені басқан соң дыбыс <span class="num" id="s-onset"></span> кешігіп шығады.</td><td><span class="chip warn">ЕСКЕРТУ</span></td><td>Кесілді, шертуге дейін 5 мс қалды</td></tr>
+          <tr><td>Кодек сапасы</td><td>Моно, 64 kbps. −70 дБ деңгейдегі жиілік жолағы <span class="num" id="s-bw"></span> аралығында.</td><td><span class="chip bad">ШЕКТЕУ</span></td><td>Түзетуге болмайды, тек қайта жазу көмектеседі</td></tr>
+          <tr><td>Артикуляциялар</td><td>Әр нотаға бір ғана жазба бар: velocity-қабаттар, қағыс, ілу, тремоло жоқ.</td><td><span class="chip info">ЖЕТІСПЕЙДІ</span></td><td>Қағыс пресеті және 3 round-robin қосылды. Жасанды velocity-қабаттар дыбысты күңгірттегендіктен алынып тасталды</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="intonation">
+    <div class="eyebrow">01 · Гамма</div>
+    <h2>Интонация: әр перне темперацияланған жүйеден қаншалық ауытқиды</h2>
+    <p class="prose">Ішектер C3 және F3 бойынша күйге келтірілген. Екеуі де шамамен үштен бір жарты тонға төмен, сондықтан аспап A=440 гаммасына тұтас ығысып тұр. Бұл жалғыз ойнағанда біліне бермейді, бірақ пианиномен, синтезатормен немесе әншімен бірге ойнағанда бірден естіледі. Перне аралығы 100 цент болуы керек. Үстіңгі ішектің 14→15 және 15→16 пернелерінде ол 75–85 центке дейін қысқарады, сондықтан ол жерлерде перне қате орнатылған немесе ішек дұрыс басылмаған.</p>
+    <div class="legend"><span><i style="background:var(--wood)"></i>Үстіңгі ішек, түзетуге дейін</span><span><i style="background:var(--plum)"></i>Астыңғы ішек, түзетуге дейін</span><span><i style="background:var(--teal)"></i>Библиотекада, түзетуден кейін</span><span><i style="background:var(--line);height:10px"></i>±5 цент: құлақ айыра алмайтын аймақ</span></div>
+    <div class="panel"><div class="chart" id="ch-cents"></div></div>
+    <h3>Перне аралықтары</h3>
+    <div class="panel"><div class="chart" id="ch-steps"></div></div>
+    <p class="cap">Бағандар көрші екі перненің арасын центпен көрсетеді. Үзік сызық 100 центтегі хроматикалық жарты тонды білдіреді.</p>
+    <h3>Шерткен сәттегі биіктік</h3>
+    <p class="prose">Ішекті шерткенде нота алғашқы 50–150 мс бойы биіктеу естіледі, содан кейін тұрақтанады. Бұл ішек тартылысының табиғи модуляциясы, домбыраға тән нәрсе. Оны түзетпедік, себебі дыбыстың "тірі" естілуі соған байланысты. Орта есеппен бастапқы ығысу <span class="num" id="s-glide"></span>.</p>
+    <div class="panel"><div class="chart" id="ch-glide"></div></div>
+    <p class="cap">Әр сызық бір нота. Биіктік өз тұрақты деңгейіне қатысты центпен берілген. Қалың сызық барлық нотаның медианасы.</p>
+  </section>
+
+  <section id="noise">
+    <div class="eyebrow">02 · Шу</div>
+    <h2>Гуіл: шу емес, инфра-бас</h2>
+    <p class="prose">Алғашқы өлшем шу едені −43 дБ шамасында екенін көрсетті, бұл студиялық деңгейге жетпейді. Спектрді қарағанда бұл ысылдаған шу емес екені анықталды. Ол гуіл мен DC ығысуы, мысалы аспапты ұстағандағы дыбыс пен микрофон тірегі. 80 Гц-тен төмен энергияның 82 %-ы 20 Гц-тен төмен жатыр. Мұндай инфрадыбысты ешкім естімейді, бірақ ол деңгей шкаласының бір бөлігін босқа алып тұрады. Шанақтың соққысы шертпеде 20–80 Гц аралығында, энергиясы 1 %-дан аз. Сондықтан 30 Гц сүзгісі шанақтың "дүңіне" тимей, гуілді ғана алып тастайды.</p>
+    <div class="legend"><span><i style="background:var(--wood)"></i>Бастапқы</span><span><i style="background:var(--teal)"></i>30 Гц HPF-тен кейін</span></div>
+    <div class="panel"><div class="chart" id="ch-noise"></div></div>
+    <p class="cap">Шу едені нота басталар алдындағы сигнал деңгейі ретінде өлшенді (шыңға қатысты дБ). Мән неғұрлым төмен болса, соғұрлым таза.</p>
+  </section>
+
+  <section id="levels">
+    <div class="eyebrow">03 · Деңгейлер</div>
+    <h2>Деңгей: тең емес және 0 dBFS-тен асады</h2>
+    <div class="two">
+      <div class="panel"><h3>Алғашқы 300 мс-тің RMS деңгейі</h3><div class="chart" id="ch-rms"></div></div>
+      <div class="panel"><h3>Декодталған шың, dBFS</h3><div class="chart" id="ch-peak"></div></div>
+    </div>
+    <p class="cap">Сол жақта: көрші ноталардың қаттылығы 10 дБ-ден астам ажырайды, сондықтан әуен "секіріп" естіледі. Оң жақта: 0 дБ-ден асқан нүктелер қызыл. Біздің бірінші нұсқамыз осы ноталарды кесіп тастаған еді. Қазір әр нота −1 dBFS-ке нормаланады.</p>
+  </section>
+
+  <section id="decay">
+    <div class="eyebrow">04 · Өшу</div>
+    <h2>Нотаның өмірі: T60 және кесілген соңы</h2>
+    <p class="prose">T60 — дыбыс 60 дБ-ге бәсеңдейтін уақыт, оны −5…−25 дБ аралығындағы еңіспен бағаладық. Төменгі ноталар 3–4 с, жоғарғы ноталар 1 с шамасында өшеді. Жазбалар бұдан ертерек бітеді, сондықтан ұзақ ұсталған нота кенет үзіледі. Әр гармониканың соңғы 400 мс-тегі өз өшу жылдамдығын өлшеп, оны −70 дБ-ге дейін синтезбен жалғастырдық. Жалғау тұсындағы ауытқу түпнұсқаның өз тербелісінен ең көбі 1.3 дБ асады.</p>
+    <div class="panel"><div class="chart" id="ch-t60"></div></div>
+    <div class="legend"><span><i style="background:var(--wood)"></i>Бастапқы файл</span><span><i style="background:var(--teal)"></i>Библиотекада</span></div>
+    <div class="panel">
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between"><h3 id="env-title">Амплитуда қисығы</h3><span class="cap">Нотаны төмендегі пернетақтадан таңдаңыз</span></div>
+      <div class="chart" id="ch-env"></div>
+    </div>
+  </section>
+
+  <section id="timbre">
+    <div class="eyebrow">05 · Тембр</div>
+    <h2>Спектр: гармоникалар және жарықтық</h2>
+    <p class="prose">Домбыраның "қоңыр" үні негізгі тон мен алғашқы 3–4 гармониканың басым болуынан шығады. Спектр центроиды 230–630 Гц аралығында, яғни дыбыс жұмсақ әрі жылы. Жылу картасы әр нотадағы 12 гармониканың деңгейін көрсетеді. Үстіңгі ішектің ортаңғы пернелерінде 2-ші гармоника күшті, сол себепті олар "ашығырақ" естіледі.</p>
+    <div class="panel scroll"><div class="chart" id="ch-harm" style="min-width:640px"></div></div>
+    <div class="two">
+      <div class="panel"><h3>Спектр центроиды, Гц</h3><div class="chart" id="ch-cent"></div></div>
+      <div class="panel"><h3>−70 дБ-дегі жиілік жолағы, Гц</h3><div class="chart" id="ch-bw"></div></div>
+    </div>
+    <p class="cap">Жиілік жолағы ноталар арасында 2 кГц-тен 15 кГц-ке дейін өзгереді. Бұл кодектің әр файлды әртүрлі қысуынан болады. Нәтижесінде кейбір ноталардың "ауасы" жоқ. Оны қайта жазусыз қалпына келтіру мүмкін емес.</p>
+  </section>
+
+  <section id="inspector">
+    <div class="eyebrow">06 · Нота бойынша</div>
+    <h2>Әр нотаны тыңдау және көру</h2>
+    <p class="prose">Пернені таңдаңыз. Сол жақта бастапқы жазба, оң жақта библиотекадағы нұсқа (f қабаты). Спектрограммада гуіл жолағы (төменгі сары аймақ) және кенет үзілу жақсы көрінеді.</p>
+    <div class="panel scroll">
+      <div class="fretboard" id="fretboard" role="group" aria-label="Домбыра пернетақтасы"></div>
+    </div>
+    <div class="panel" style="display:grid;gap:18px">
+      <h3 id="ins-title">—</h3>
+      <dl class="stats" id="ins-stats"></dl>
+      <div class="compare">
+        <figure><figcaption style="color:var(--wood)">Бастапқы</figcaption><img id="img-before" alt="Бастапқы жазбаның спектрограммасы"><audio id="au-before" controls preload="none"></audio></figure>
+        <figure><figcaption style="color:var(--teal)">Библиотекада</figcaption><img id="img-after" alt="Өңделген нотаның спектрограммасы"><audio id="au-after" controls preload="none"></audio></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="brightness">
+    <div class="eyebrow">07 · Шертпе</div>
+    <h2>Шертпенің ашықтығы: өңдеу дыбысты күңгірттемеуі керек</h2>
+    <p class="prose">Алдыңғы нұсқада бір жазбадан жасалған p және mf velocity-қабаттары болған. Олар түпнұсқаның төменжиілікті сүзгімен өткізілген көшірмелері еді. Тыңдау кезінде дыбыс "басылып" естілді. Өлшеп көргенде, шертпенің 2 кГц-тен жоғары энергиясы дәл осы қабаттардың кесірінен 6.8 дБ әлсіреген. Деңгей теңестірудің, соңын ұзартудың және баптаудың ашықтыққа әсері болмады. Сондықтан жасанды қабаттарды алып тастадық. Velocity енді тек қаттылықты басқарады. Нақты p/f қабаттары тек нақты жазбадан алынуы керек.</p>
+    <div class="legend"><span><i style="background:var(--wood)"></i>Бастапқы жазба</span><span><i style="background:var(--teal)"></i>Библиотекада</span></div>
+    <div class="panel"><div class="chart" id="ch-bright"></div></div>
+    <p class="cap">Шертпенің алғашқы 40 мс-індегі 2 кГц-тен жоғары энергия, алғашқы 300 мс-тің жалпы деңгейіне қатысты (дБ). Мән жоғары болса, шертпе ашық. Тест әр құрастыруда бірде-бір нота бастапқыдан 1 дБ-ден артық күңгірт болмағанын тексереді.</p>
+  </section>
+
+  <section id="listen">
+    <div class="eyebrow">08 · Тыңдау</div>
+    <h2>Бір әуен, екі нұсқа</h2>
+    <p class="prose">Бір партитура екі рет ойнатылды: бастапқы файлдармен және жаңа библиотекамен. Алдымен әуен, содан кейін 6/8 өлшеміндегі қағыс ырғағы ("дың-ды-ды"). Екі нұсқа бірдей қаттылыққа (RMS) келтірілген. Әйтпесе қаттырақ нұсқа әрқашан "жақсы" естіледі. Бастапқы нұсқада ноталардың A=440-тан төмен тұрғаны және деңгейлердің секіретіні естіледі.</p>
+    <div class="listen">
+      <div class="panel"><h3 style="color:var(--wood)">Бастапқы үлгілер</h3><audio controls preload="none" src="audio/demo_before.mp3"></audio></div>
+      <div class="panel"><h3 style="color:var(--teal)">Dombra Studio</h3><audio controls preload="none" src="audio/demo_after.mp3"></audio></div>
+    </div>
+    <h3>Қағыс пресеті</h3>
+    <p class="prose">Екі ішек бір пернеде басылады, сондықтан таза кварта шығады. Төмен қағыста алдымен үстіңгі ішек, 14 мс-тен кейін астыңғы ішек естіледі. Жоғары қағыста керісінше, 10 мс аралықпен және сәл ақырынырақ. Екеуі кезектесіп ойнайды, сондықтан қайталанған қағыс бірдей естілмейді.</p>
+    <div class="listen">
+      <div class="panel"><h3>Ашық ішектер, төмен</h3><audio controls preload="none" src="audio/q0dn.mp3"></audio></div>
+      <div class="panel"><h3>Ашық ішектер, жоғары</h3><audio controls preload="none" src="audio/q0up.mp3"></audio></div>
+      <div class="panel"><h3>9-перне, төмен</h3><audio controls preload="none" src="audio/q9dn.mp3"></audio></div>
+      <div class="panel"><h3>12-перне, төмен</h3><audio controls preload="none" src="audio/q12dn.mp3"></audio></div>
+    </div>
+  </section>
+
+  <section id="next">
+    <div class="eyebrow">09 · Келесі қадам</div>
+    <h2>Шын студиялық деңгейге жету үшін не жазу керек</h2>
+    <p class="prose">Өңдеу бар материалды барынша жақсартты. Бірақ кодек сапасы, бір ғана velocity-қабат және артикуляциялардың жоқтығы тек жаңа жазбамен шешіледі. Сессияны мына жоспар бойынша өткізуді ұсынамыз.</p>
+    <div class="two">
+      <div class="panel">
+        <h3>Жазу техникасы</h3>
+        <ul class="plan">
+          <li>WAV, 24-bit / 48 немесе 96 кГц. MP3/AAC пайдаланбаңыз.</li>
+          <li>Екі микрофон: шанақтың ойығына 20–30 см-ден кардиоида, сонымен қатар мойын мен шанақ түйіскен жерге екінші микрофон. Бөлмені жазу үшін алыстағы стерео жұп қосуға болады.</li>
+          <li>Тыныш бөлме, шу едені −70 дБ-ден төмен болсын. Микрофон тірегі виброизоляторда тұрсын.</li>
+          <li>Әр сессия алдында тюнермен A=440-қа күйге келтіріңіз, ішектерді сессия ортасында да тексеріп отырыңыз.</li>
+          <li>Әр нотаны толық өшкенше жазыңыз (−70 дБ, 4–6 с), сосын келесісіне өтіңіз.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Не жазу керек</h3>
+        <ul class="plan">
+          <li>Әр перне, екі ішек: 4 динамика (pp, p, mf, f) × 3 round-robin.</li>
+          <li>Қағыс: төмен және жоғары, бос ішекпен және екі ішекті бірге басып.</li>
+          <li>Шертпе (жеке саусақпен шерту), ілу (hammer-on), сырғыту (slide), тремоло.</li>
+          <li>Флажолеттер: 5, 7, 12-пернелер.</li>
+          <li>Release-дыбыстары (ішекті басу), перне шуы, шанақты әртүрлі жерден соғу.</li>
+          <li>Домбыраның басқа бұрауы: Ре–Соль (D3–G3), сонымен қатар Ре–Ля.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="eyebrow">10 · Дереккөздер</div>
+    <h2>Зерттеулер, оқулықтар және дайын библиотекалар</h2>
+    <p class="prose">Домбыра шанағының резонанстарын сандармен өлшеген ашық ғылыми мақала табылмады. Бар еңбектер не ақылы, не сипаттамалық. Сондықтан бұл талдаудағы өлшемдердің бәрі осы 40 жазбадан алынды. Төмендегі әдебиет әдістің негізін береді.</p>
+    <div class="two">
+      <div class="panel">
+        <h3>Домбыра туралы</h3>
+        <ul class="plan">
+          <li>L. Kasper, P. Vogt. <a href="https://pubs.aip.org/aapt/pte/article-abstract/58/9/616/450572/Tradition-Meets-Technology-Acoustical-Analysis-of">Tradition Meets Technology: Acoustical Analysis of a Kazakh Dombra with Smartphones</a>. The Physics Teacher 58, 616 (2020). Домбыраның спектрін смартфонмен талдау (ақылы).</li>
+          <li>Л. А. Алексеева, Ж. Нажмеденов. «Особенности музыкального строя казахской домбры». Перне жүйесі мен строй туралы. Сілтеме: <a href="https://assembly.kz/en/ethnos/ru/kazakhi/muzyka/kazakhskaya-dombyra/">assembly.kz</a>.</li>
+          <li><a href="https://www.researchgate.net/publication/388435026_Dombra_Types_Distribution_Area_and_Its_Role_in_Epic_Art">Dombra: Types, Distribution Area, and Its Role in Epic Art</a>. Домбыраның түрлері мен өлшемдері.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Акустика және синтез оқулықтары</h3>
+        <ul class="plan">
+          <li>J. O. Smith III. <a href="https://ccrma.stanford.edu/~jos/pasp/">Physical Audio Signal Processing</a> (тегін, CCRMA). Ішек моделі, commuted synthesis, шанақ резонансы.</li>
+          <li>N. Fletcher, T. Rossing. <i>The Physics of Musical Instruments</i>. Springer, 2-басылым. Шертпелі аспаптар акустикасының негізгі оқулығы.</li>
+          <li>M. Karjalainen, V. Välimäki, T. Tolonen. <i>Plucked-String Models: From the Karplus-Strong Algorithm to Digital Waveguides and Beyond</i>. Computer Music Journal 22(3), 1998.</li>
+          <li><a href="https://arxiv.org/pdf/2604.12878">Four Decades of Digital Waveguides</a> (arXiv). Толқын жолы синтезінің шолуы.</li>
+          <li><a href="https://decentsampler-developers-guide.readthedocs.io/">DecentSampler Developer Guide</a>. Пресет форматы, round-robin, эффектілер.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Дайын кәсіби библиотекалар</h3>
+        <ul class="plan">
+          <li><a href="https://impactsoundworks.com/deal/plectra-series-3-kazakh-dombra/">Impact Soundworks · Plectra Series 3: Kazakh Dombra</a>. 1500-ден астам сэмпл, 24-bit стерео, әр нотаға 16-ға дейін round-robin. Kontakt керек.</li>
+          <li><a href="https://wavelet-audio.com/flow-motion-dombra/">Wavelet Audio · Flow &amp; Motion: Dombra</a>. Ырғақ пен қағысқа арналған библиотека, Kontakt Player-де жұмыс істейді.</li>
+          <li><a href="https://www.producerloops.com/Download-Earthtone-Kazakh-Dombra.html">Producer Loops · Earthtone Kazakh Dombra</a>. Тегін үлгі-жинағы бар, бірақ олар жеке ноталар емес, луптар.</li>
+        </ul>
+        <p class="cap">Бұл библиотекалардың лицензиясы әдетте сэмплдерді өз қосымшаңыздың ішінде таратуға рұқсат бермейді. Тек DAW-та музыка жасауға болады.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<div id="tip" hidden></div>
+
+<script>
+(async function () {
+  const NAMES = 'C C# D D# E F F# G G# A A# B'.split(' ');
+  const noteName = k => NAMES[k % 12] + (Math.floor(k / 12) - 1);
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const tip = document.getElementById('tip');
+  const showTip = (ev, html) => {
+    tip.hidden = false; tip.textContent = '';
+    html.forEach((line, i) => { if (i) tip.appendChild(document.createElement('br')); tip.appendChild(document.createTextNode(line)); });
+    const r = tip.getBoundingClientRect();
+    tip.style.left = Math.max(8, Math.min(innerWidth - r.width - 8, ev.clientX + 14)) + 'px';
+    tip.style.top = Math.max(8, Math.min(innerHeight - r.height - 8, ev.clientY + 14)) + 'px';
+  };
+  const hideTip = () => { tip.hidden = true; };
+
+  let notes;
+  try { notes = (await (await fetch('data.json')).json()).notes; }
+  catch (e) { document.querySelectorAll('.chart').forEach(c => c.textContent = 'Деректер жүктелмеді. Бетті жаңартып көріңіз.'); return; }
+  const upper = notes.filter(n => n.string === 'upper'), lower = notes.filter(n => n.string === 'lower');
+  const byName = Object.fromEntries(notes.map(n => [n.name, n]));
+  const label = n => `${n.string === 'upper' ? 'Үстіңгі' : 'Астыңғы'} ішек, ${n.fret}-перне (${n.name}) · ${noteName(n.key)}`;
+
+  // summary numbers in the verdict table
+  const ext = (f, arr = notes) => d3.extent(arr, f);
+  const fmt = (v, d = 1) => (v > 0 ? '+' : '') + v.toFixed(d).replace('-', '−');
+  const set = (id, t) => { document.getElementById(id).textContent = t; };
+  const [cmin, cmax] = ext(n => n.cents); set('s-cents', `${fmt(cmax, 0)}…${fmt(cmin, 0)} цент`);
+  set('s-after', `≤ ${d3.max(notes, n => Math.abs(n.after_cents)).toFixed(1)} цент`);
+  set('s-noise', `${fmt(d3.mean(notes, n => n.noise_db))} дБ`);
+  set('s-noise2', `${fmt(d3.mean(notes, n => n.noise_after))} дБ`);
+  const [lmin, lmax] = ext(n => n.lf_before); set('s-lf', `${Math.round(lmin * 100)}–${Math.round(lmax * 100)} %`);
+  set('s-over', `${fmt(d3.max(notes, n => n.peak_float_db))} дБ-ге`);
+  const [tmin, tmax] = ext(n => n.tail_before); set('s-tail', `${fmt(tmax)}…${fmt(tmin)} дБ`);
+  const [la, lb] = ext(n => n.len_after); set('s-len', `${la.toFixed(1)}–${lb.toFixed(1)} с`);
+  const [rmin, rmax] = ext(n => n.rms_db); set('s-rms', `${(rmax - rmin).toFixed(0)} дБ-ге`);
+  const [omin, omax] = ext(n => n.onset_ms); set('s-onset', `${Math.round(omin)}–${Math.round(omax)} мс`);
+  const [bmin, bmax] = ext(n => n.bandwidth); set('s-bw', `${(bmin / 1000).toFixed(1)}–${(bmax / 1000).toFixed(1)} кГц`);
+  set('s-glide', `${fmt(d3.median(notes.filter(n => n.glide_c != null), n => n.glide_c), 0)} цент`);
+
+  const M = { t: 12, r: 14, b: 34, l: 48 };
+  function frame(id, h, opts = {}) {
+    const el = document.getElementById(id); el.textContent = '';
+    const w = Math.max(280, el.clientWidth);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('role', 'img').attr('aria-label', opts.label || '');
+    return { svg, w, h, iw: w - M.l - M.r, ih: h - M.t - M.b, g: svg.append('g').attr('transform', `translate(${M.l},${M.t})`) };
+  }
+  function axes(f, x, y, xl, yl, xt) {
+    f.g.append('g').attr('class', 'grid').call(d3.axisLeft(y).ticks(5).tickSize(-f.iw).tickFormat('')).select('.domain').remove();
+    f.g.append('g').attr('transform', `translate(0,${f.ih})`).call(xt || d3.axisBottom(x).ticks(Math.min(10, f.iw / 60)));
+    f.g.append('g').call(d3.axisLeft(y).ticks(5));
+    if (xl) f.g.append('text').attr('x', f.iw).attr('y', f.ih + 30).attr('text-anchor', 'end').text(xl);
+    if (yl) f.g.append('text').attr('x', -M.l + 4).attr('y', -2).text(yl);
+  }
+  const fretAxis = (x, f) => d3.axisBottom(x).tickValues(d3.range(0, 20, f.iw < 420 ? 2 : 1)).tickFormat(d3.format('d'));
+
+  function drawCents() {
+    const f = frame('ch-cents', 300, { label: 'Ноталардың A=440-тан ауытқуы' });
+    const x = d3.scaleLinear([0, 19], [0, f.iw]), y = d3.scaleLinear([-85, 10], [f.ih, 0]);
+    f.g.append('rect').attr('x', 0).attr('width', f.iw).attr('y', y(5)).attr('height', y(-5) - y(5)).attr('fill', css('--line')).attr('opacity', 0.7);
+    axes(f, x, y, 'перне', 'цент', fretAxis(x, f));
+    const series = [[upper, '--wood', n => n.cents], [lower, '--plum', n => n.cents], [upper, '--teal', n => n.after_cents], [lower, '--teal', n => n.after_cents]];
+    series.forEach(([data, c, v]) => {
+      f.g.append('path').datum(data).attr('fill', 'none').attr('stroke', css(c)).attr('stroke-width', 2)
+        .attr('d', d3.line(n => x(n.fret), n => y(v(n))));
+      f.g.selectAll(null).data(data).join('circle').attr('cx', n => x(n.fret)).attr('cy', n => y(v(n))).attr('r', 4)
+        .attr('fill', css('--panel')).attr('stroke', css(c)).attr('stroke-width', 2)
+        .on('mousemove', (ev, n) => showTip(ev, [label(n), `бастапқы: ${fmt(n.cents)} ц`, `библиотекада: ${fmt(n.after_cents)} ц`, `f₀ = ${n.f0} Гц`])).on('mouseleave', hideTip);
+    });
+  }
+  function drawSteps() {
+    const f = frame('ch-steps', 220, { label: 'Көрші перне аралықтары' });
+    const rows = [];
+    [[upper, '--wood'], [lower, '--plum']].forEach(([s, c], si) => s.slice(1).forEach((n, i) => rows.push({ n, prev: s[i], c, si, step: 100 + n.cents - s[i].cents })));
+    const x = d3.scaleBand(d3.range(1, 20), [0, f.iw]).padding(0.25), xs = d3.scaleBand([0, 1], [0, x.bandwidth()]).padding(0.1);
+    const y = d3.scaleLinear([60, 140], [f.ih, 0]);
+    axes(f, x, y, 'перне (алдыңғысынан)', 'цент', d3.axisBottom(x).tickValues(d3.range(1, 20, f.iw < 420 ? 2 : 1)));
+    f.g.append('line').attr('x1', 0).attr('x2', f.iw).attr('y1', y(100)).attr('y2', y(100)).attr('stroke', css('--ink')).attr('stroke-dasharray', '4 3');
+    f.g.selectAll(null).data(rows).join('rect').attr('x', d => x(d.n.fret) + xs(d.si)).attr('width', xs.bandwidth())
+      .attr('y', d => y(Math.max(100, d.step))).attr('height', d => Math.abs(y(d.step) - y(100))).attr('fill', d => css(d.c))
+      .on('mousemove', (ev, d) => showTip(ev, [`${d.prev.name} → ${d.n.name}`, `аралық: ${d.step.toFixed(0)} ц (норма 100)`])).on('mouseleave', hideTip);
+  }
+  function drawGlide() {
+    const f = frame('ch-glide', 240, { label: 'Шерткен сәттегі биіктік' });
+    const x = d3.scaleLinear([0, 1.0], [0, f.iw]), y = d3.scaleLinear([-20, 60], [f.ih, 0]);
+    axes(f, x, y, 'уақыт, с', 'цент');
+    const tracks = notes.map(n => {
+      const v = n.pitch_track.map((c, i) => c == null ? null : { t: i * 0.02, c });
+      const steady = d3.median(v.slice(25).filter(Boolean), d => d.c);
+      return steady == null ? [] : v.filter(d => d && Math.abs(d.c - steady) < 150).map(d => ({ t: d.t, c: d.c - steady })).filter(d => d.t <= 1);
+    }).filter(t => t.length > 10);
+    const line = d3.line(d => x(d.t), d => y(d.c)).defined(d => d.c > -20 && d.c < 60);
+    tracks.forEach(t => f.g.append('path').datum(t).attr('fill', 'none').attr('stroke', css('--muted')).attr('stroke-opacity', 0.35).attr('d', line));
+    const med = d3.range(0, 1.0001, 0.02).map(t => ({ t, c: d3.median(tracks.map(tr => (tr.find(d => Math.abs(d.t - t) < 0.001) || {}).c).filter(v => v != null)) })).filter(d => d.c != null);
+    f.g.append('path').datum(med).attr('fill', 'none').attr('stroke', css('--teal')).attr('stroke-width', 3).attr('d', line);
+  }
+  function drawNoise() {
+    const f = frame('ch-noise', 260, { label: 'Шу едені дейін және кейін' });
+    const x = d3.scaleBand(notes.map(n => n.name), [0, f.iw]).padding(0.3), y = d3.scaleLinear([-75, -30], [f.ih, 0]);
+    axes(f, x, y, '', 'дБ', d3.axisBottom(x).tickValues(notes.map(n => n.name).filter((_, i) => i % (f.iw < 500 ? 4 : 2) === 0)));
+    const cx = n => x(n.name) + x.bandwidth() / 2;
+    f.g.selectAll(null).data(notes).join('line').attr('x1', cx).attr('x2', cx).attr('y1', n => y(n.noise_db)).attr('y2', n => y(n.noise_after)).attr('stroke', css('--line')).attr('stroke-width', 2);
+    [['noise_db', '--wood'], ['noise_after', '--teal']].forEach(([k, c]) =>
+      f.g.selectAll(null).data(notes).join('circle').attr('cx', cx).attr('cy', n => y(n[k])).attr('r', 3.5).attr('fill', css(c))
+        .on('mousemove', (ev, n) => showTip(ev, [label(n), `бастапқы: ${fmt(n.noise_db)} дБ`, `HPF-тен кейін: ${fmt(n.noise_after)} дБ`, `80 Гц-тен төмен энергия: ${Math.round(n.lf_before * 100)} % → ${(n.lf_after * 100).toFixed(1)} %`])).on('mouseleave', hideTip));
+  }
+  function bars(id, key, domain, ylab, color, tipf, h = 220) {
+    const f = frame(id, h);
+    const x = d3.scaleBand(notes.map(n => n.name), [0, f.iw]).padding(0.2), y = d3.scaleLinear(domain, [f.ih, 0]);
+    axes(f, x, y, '', ylab, d3.axisBottom(x).tickValues(notes.map(n => n.name).filter((_, i) => i % (f.iw < 500 ? 5 : 3) === 0)));
+    const base = Math.max(domain[0], Math.min(domain[1], 0));
+    f.g.selectAll(null).data(notes).join('rect').attr('x', n => x(n.name)).attr('width', x.bandwidth())
+      .attr('y', n => y(Math.max(base, n[key]))).attr('height', n => Math.abs(y(n[key]) - y(base))).attr('fill', color)
+      .on('mousemove', (ev, n) => showTip(ev, tipf(n))).on('mouseleave', hideTip);
+    return { f, x, y };
+  }
+  function drawLevels() {
+    bars('ch-rms', 'rms_db', [-26, 0], 'дБ', n => css(n.string === 'upper' ? '--wood' : '--plum'), n => [label(n), `RMS: ${fmt(n.rms_db)} дБ`, `библиотекада түзету: ${fmt(n.gain)} дБ`]);
+    const { f, x, y } = bars('ch-peak', 'peak_float_db', [-4, 2.5], 'dBFS', n => css(n.peak_float_db > 0 ? '--bad' : '--muted'), n => [label(n), `шың: ${fmt(n.peak_float_db, 2)} dBFS`, `1.0-ден асқан сэмпл: ${n.over_count}`]);
+    f.g.append('line').attr('x1', 0).attr('x2', f.iw).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', css('--ink'));
+  }
+  function drawT60() {
+    const { f, x, y } = bars('ch-t60', 't60', [0, 4.5], 'с', css('--line'), n => [label(n), `T60 ≈ ${n.t60} с`, `файл ұзындығы: ${n.dur} с → ${n.len_after} с`], 240);
+    const cx = n => x(n.name) + x.bandwidth() / 2;
+    [['dur', '--wood'], ['len_after', '--teal']].forEach(([k, c]) =>
+      f.g.selectAll(null).data(notes).join('path').attr('d', d3.symbol(d3.symbolDiamond, 34)).attr('transform', n => `translate(${cx(n)},${y(n[k])})`).attr('fill', css(c)).attr('pointer-events', 'none'));
+    f.g.append('text').attr('x', f.iw).attr('y', -2).attr('text-anchor', 'end').text('баған: T60 · ромб: файл ұзындығы');
+  }
+  function drawEnv(n) {
+    document.getElementById('env-title').textContent = `Амплитуда қисығы · ${label(n)}`;
+    const f = frame('ch-env', 230, { label: 'Амплитуда қисығы дейін және кейін' });
+    const tmax = Math.max(n.env.length, n.env_after.length) * 0.01;
+    const x = d3.scaleLinear([0, tmax], [0, f.iw]), y = d3.scaleLinear([-80, 0], [f.ih, 0]);
+    axes(f, x, y, 'уақыт, с', 'дБ');
+    f.g.append('line').attr('x1', 0).attr('x2', f.iw).attr('y1', y(-70)).attr('y2', y(-70)).attr('stroke', css('--muted')).attr('stroke-dasharray', '3 3');
+    [[n.env_after, '--teal'], [n.env, '--wood']].forEach(([e, c]) => f.g.append('path').datum(e.map((v, i) => [i * 0.01, Math.max(-80, v)]))
+      .attr('fill', 'none').attr('stroke', css(c)).attr('stroke-width', 1.8).attr('d', d3.line(d => x(d[0]), d => y(d[1]))));
+  }
+  function drawHarm() {
+    const el = document.getElementById('ch-harm'); el.textContent = '';
+    const w = Math.max(640, el.clientWidth), h = 300, m = { t: 8, r: 70, b: 44, l: 40 };
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('role', 'img').attr('aria-label', 'Гармоникалар жылу картасы');
+    const g = svg.append('g').attr('transform', `translate(${m.l},${m.t})`);
+    const iw = w - m.l - m.r, ih = h - m.t - m.b;
+    const x = d3.scaleBand(notes.map(n => n.name), [0, iw]).padding(0.04), y = d3.scaleBand(d3.range(1, 13), [0, ih]).padding(0.04);
+    const color = d3.scaleSequential([-60, 0], d3.interpolateMagma);
+    notes.forEach(n => n.harmonics.forEach((v, i) => g.append('rect').attr('x', x(n.name)).attr('y', y(i + 1)).attr('width', x.bandwidth()).attr('height', y.bandwidth())
+      .attr('fill', color(Math.max(-60, v))).on('mousemove', ev => showTip(ev, [label(n), `${i + 1}-гармоника: ${fmt(v)} дБ`])).on('mouseleave', hideTip)));
+    g.append('g').attr('transform', `translate(0,${ih})`).call(d3.axisBottom(x).tickValues(notes.map(n => n.name).filter((_, i) => i % 2 === 0))).select('.domain').remove();
+    g.append('g').call(d3.axisLeft(y)).select('.domain').remove();
+    g.append('text').attr('x', -m.l + 2).attr('y', ih + 38).text('гармоника ↑ · нота →');
+    const lg = svg.append('g').attr('transform', `translate(${w - m.r + 18},${m.t})`);
+    d3.range(0, 1.0001, 0.1).forEach(t => lg.append('rect').attr('y', t * 120).attr('width', 12).attr('height', 13).attr('fill', color(-60 * t)));
+    lg.append('text').attr('x', 16).attr('y', 9).text('0 дБ'); lg.append('text').attr('x', 16).attr('y', 130).text('−60');
+  }
+  function drawLine(id, key, scaleType, domain, unit) {
+    const f = frame(id, 220);
+    const x = d3.scaleLinear([0, 19], [0, f.iw]), y = (scaleType === 'log' ? d3.scaleLog : d3.scaleLinear)(domain, [f.ih, 0]);
+    axes(f, x, y, 'перне', unit, fretAxis(x, f));
+    [[upper, '--wood'], [lower, '--plum']].forEach(([s, c]) => {
+      f.g.append('path').datum(s).attr('fill', 'none').attr('stroke', css(c)).attr('stroke-width', 2).attr('d', d3.line(n => x(n.fret), n => y(n[key])));
+      f.g.selectAll(null).data(s).join('circle').attr('cx', n => x(n.fret)).attr('cy', n => y(n[key])).attr('r', 3.5).attr('fill', css(c))
+        .on('mousemove', (ev, n) => showTip(ev, [label(n), `${n[key]} ${unit}`])).on('mouseleave', hideTip);
+    });
+  }
+  function drawBright() {
+    const f = frame('ch-bright', 260, { label: 'Шертпенің ашықтығы дейін және кейін' });
+    const lo = d3.min(notes, n => Math.min(n.bright_before, n.bright_after)), hi = d3.max(notes, n => Math.max(n.bright_before, n.bright_after));
+    const x = d3.scaleBand(notes.map(n => n.name), [0, f.iw]).padding(0.3), y = d3.scaleLinear([Math.floor(lo / 5) * 5, Math.ceil(hi / 5) * 5], [f.ih, 0]);
+    axes(f, x, y, '', 'дБ', d3.axisBottom(x).tickValues(notes.map(n => n.name).filter((_, i) => i % (f.iw < 500 ? 4 : 2) === 0)));
+    const cx = n => x(n.name) + x.bandwidth() / 2;
+    f.g.selectAll(null).data(notes).join('line').attr('x1', cx).attr('x2', cx).attr('y1', n => y(n.bright_before)).attr('y2', n => y(n.bright_after)).attr('stroke', css('--line')).attr('stroke-width', 2);
+    [['bright_before', '--wood'], ['bright_after', '--teal']].forEach(([k, c]) =>
+      f.g.selectAll(null).data(notes).join('circle').attr('cx', cx).attr('cy', n => y(n[k])).attr('r', 3.5).attr('fill', css(c))
+        .on('mousemove', (ev, n) => showTip(ev, [label(n), `бастапқы: ${fmt(n.bright_before)} дБ`, `библиотекада: ${fmt(n.bright_after)} дБ`, `айырма: ${fmt(n.bright_after - n.bright_before)} дБ`])).on('mouseleave', hideTip));
+  }
+
+  // fretboard inspector
+  const fb = document.getElementById('fretboard');
+  const nums = document.createElement('div'); nums.className = 'frets-n'; nums.appendChild(document.createElement('span'));
+  for (let i = 0; i < 20; i++) { const s = document.createElement('span'); s.textContent = i; nums.appendChild(s); }
+  fb.appendChild(nums);
+  let current = 'u2';
+  [[upper, 'Үстіңгі ішек · C3'], [lower, 'Астыңғы ішек · F3']].forEach(([s, t]) => {
+    const row = document.createElement('div'); row.className = 'string';
+    const lab = document.createElement('span'); lab.textContent = t; row.appendChild(lab);
+    s.forEach(n => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'fret'; b.id = `fret-${n.name}`; b.dataset.name = n.name;
+      b.setAttribute('aria-label', label(n)); b.textContent = noteName(n.key);
+      const sm = document.createElement('small'); sm.textContent = fmt(n.cents, 0); b.appendChild(sm);
+      b.onclick = () => select(n.name); row.appendChild(b);
+    });
+    fb.appendChild(row);
+  });
+  function select(name) {
+    current = name; const n = byName[name];
+    fb.querySelectorAll('.fret').forEach(b => b.setAttribute('aria-pressed', b.dataset.name === name));
+    document.getElementById('ins-title').textContent = label(n);
+    const st = document.getElementById('ins-stats'); st.textContent = '';
+    [['f₀', `${n.f0} Гц`], ['Ауытқу', `${fmt(n.cents)} → ${fmt(n.after_cents)} ц`], ['Шу едені', `${fmt(n.noise_db)} → ${fmt(n.noise_after)} дБ`],
+     ['Соңы', `${fmt(n.tail_before)} дБ-де үзілді`], ['Ұзындық', `${n.dur} → ${n.len_after} с`], ['T60', `${n.t60} с`],
+     ['Шабуыл', `${n.attack_ms} мс`], ['Центроид', `${n.centroid} Гц`]].forEach(([k, v]) => {
+      const d = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = k; dd.textContent = v; d.append(dt, dd); st.appendChild(d);
+    });
+    document.getElementById('img-before').src = `spec/${name}_before.png`;
+    document.getElementById('img-after').src = `spec/${name}_after.png`;
+    document.getElementById('au-before').src = `audio/${name}_before.mp3`;
+    document.getElementById('au-after').src = `audio/${name}_after.mp3`;
+    drawEnv(n);
+  }
+
+  function drawAll() {
+    drawCents(); drawSteps(); drawGlide(); drawNoise(); drawLevels(); drawT60(); drawHarm();
+    drawLine('ch-cent', 'centroid', 'linear', [150, 700], 'Гц'); drawLine('ch-bw', 'bandwidth', 'log', [1500, 20000], 'Гц');
+    drawBright(); drawEnv(byName[current]);
+  }
+  select(current); drawAll();
+  let rt; new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(drawAll, 120); }).observe(document.querySelector('.wrap'));
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawAll);
+  new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+// Dombra Studio - Kazakh dombra, single notes. Keys F3-G4 alternate between the two strings.
+// A=440, tuning baked into the samples. Velocity sets the volume only.
+<control> default_path=Samples/
+
+<global> ampeg_attack=0.001 ampeg_release=0.8 amp_veltrack=70 volume=-3 pitch_random=5 amp_random=0.6
+
+<region> sample=u0.wav lokey=45 hikey=48 pitch_keycenter=48 volume=0.0
+<region> sample=u1.wav lokey=49 hikey=49 pitch_keycenter=49 volume=0.0
+<region> sample=u2.wav lokey=50 hikey=50 pitch_keycenter=50 volume=0.0
+<region> sample=u3.wav lokey=51 hikey=51 pitch_keycenter=51 volume=0.0
+<region> sample=u4.wav lokey=52 hikey=52 pitch_keycenter=52 volume=0.0
+<region> sample=u5.wav lokey=53 hikey=53 pitch_keycenter=53 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=d0.wav lokey=53 hikey=53 pitch_keycenter=53 volume=0.0 lorand=0.50 hirand=1.00
+<region> sample=u6.wav lokey=54 hikey=54 pitch_keycenter=54 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=d1.wav lokey=54 hikey=54 pitch_keycenter=54 volume=0.0 lorand=0.50 hirand=1.00
+<region> sample=u7.wav lokey=55 hikey=55 pitch_keycenter=55 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=d2.wav lokey=55 hikey=55 pitch_keycenter=55 volume=-4.5 lorand=0.50 hirand=1.00
+<region> sample=u8.wav lokey=56 hikey=56 pitch_keycenter=56 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=d3.wav lokey=56 hikey=56 pitch_keycenter=56 volume=-1.3 lorand=0.50 hirand=1.00
+<region> sample=u9.wav lokey=57 hikey=57 pitch_keycenter=57 volume=-2.0 lorand=0.00 hirand=0.50
+<region> sample=d4.wav lokey=57 hikey=57 pitch_keycenter=57 volume=0.0 lorand=0.50 hirand=1.00
+<region> sample=u10.wav lokey=58 hikey=58 pitch_keycenter=58 volume=-5.4 lorand=0.00 hirand=0.50
+<region> sample=d5.wav lokey=58 hikey=58 pitch_keycenter=58 volume=0.0 lorand=0.50 hirand=1.00
+<region> sample=u11.wav lokey=59 hikey=59 pitch_keycenter=59 volume=-4.3 lorand=0.00 hirand=0.50
+<region> sample=d6.wav lokey=59 hikey=59 pitch_keycenter=59 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=u12.wav lokey=60 hikey=60 pitch_keycenter=60 volume=-4.1 lorand=0.00 hirand=0.50
+<region> sample=d7.wav lokey=60 hikey=60 pitch_keycenter=60 volume=0.0 lorand=0.50 hirand=1.00
+<region> sample=u13.wav lokey=61 hikey=61 pitch_keycenter=61 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=d8.wav lokey=61 hikey=61 pitch_keycenter=61 volume=-2.6 lorand=0.50 hirand=1.00
+<region> sample=u14.wav lokey=62 hikey=62 pitch_keycenter=62 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=d9.wav lokey=62 hikey=62 pitch_keycenter=62 volume=-2.4 lorand=0.50 hirand=1.00
+<region> sample=u15.wav lokey=63 hikey=63 pitch_keycenter=63 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=d10.wav lokey=63 hikey=63 pitch_keycenter=63 volume=0.0 lorand=0.50 hirand=1.00
+<region> sample=u16.wav lokey=64 hikey=64 pitch_keycenter=64 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=d11.wav lokey=64 hikey=64 pitch_keycenter=64 volume=0.0 lorand=0.50 hirand=1.00
+<region> sample=u17.wav lokey=65 hikey=65 pitch_keycenter=65 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=d12.wav lokey=65 hikey=65 pitch_keycenter=65 volume=0.0 lorand=0.50 hirand=1.00
+<region> sample=u18.wav lokey=66 hikey=66 pitch_keycenter=66 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=d13.wav lokey=66 hikey=66 pitch_keycenter=66 volume=-0.7 lorand=0.50 hirand=1.00
+<region> sample=u19.wav lokey=67 hikey=67 pitch_keycenter=67 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=d14.wav lokey=67 hikey=67 pitch_keycenter=67 volume=-5.6 lorand=0.50 hirand=1.00
+<region> sample=d15.wav lokey=68 hikey=68 pitch_keycenter=68 volume=0.0
+<region> sample=d16.wav lokey=69 hikey=69 pitch_keycenter=69 volume=0.0
+<region> sample=d17.wav lokey=70 hikey=70 pitch_keycenter=70 volume=0.0
+<region> sample=d18.wav lokey=71 hikey=71 pitch_keycenter=71 volume=0.0
+<region> sample=d19.wav lokey=72 hikey=76 pitch_keycenter=72 volume=-1.9
+
+// body knock (шанақ)
+<region> sample=beat.wav key=36 pitch_keytrack=0 loop_mode=one_shot

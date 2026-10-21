@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DecentSampler minVersion="1.0.0">
+  <ui width="812" height="375" bgColor="FF2B1D14">
+    <tab name="main">
+      <label x="20" y="10" width="600" height="30" text="DOMBRA STUDIO" textColor="FFF2E6D0" textSize="24"/>
+      <labeled-knob x="20" y="60" width="90" label="Volume" type="float" minValue="0" maxValue="1" value="0.5" textColor="FFF2E6D0" trackForegroundColor="FFC9A35C">
+        <binding type="amp" level="instrument" position="0" parameter="AMP_VOLUME"/>
+      </labeled-knob>
+      <labeled-knob x="120" y="60" width="90" label="Attack" type="float" minValue="0.001" maxValue="1" value="0.001" textColor="FFF2E6D0" trackForegroundColor="FFC9A35C">
+        <binding type="amp" level="instrument" position="0" parameter="ENV_ATTACK"/>
+      </labeled-knob>
+      <labeled-knob x="220" y="60" width="90" label="Release" type="float" minValue="0.05" maxValue="4" value="0.8" textColor="FFF2E6D0" trackForegroundColor="FFC9A35C">
+        <binding type="amp" level="instrument" position="0" parameter="ENV_RELEASE"/>
+      </labeled-knob>
+      <labeled-knob x="320" y="60" width="90" label="Tone" type="float" minValue="300" maxValue="22000" value="22000" textColor="FFF2E6D0" trackForegroundColor="FFC9A35C">
+        <binding type="effect" level="instrument" position="0" parameter="FX_FILTER_FREQUENCY"/>
+      </labeled-knob>
+      <labeled-knob x="420" y="60" width="90" label="Reverb" type="float" minValue="0" maxValue="1" value="0.15" textColor="FFF2E6D0" trackForegroundColor="FFC9A35C">
+        <binding type="effect" level="instrument" position="1" parameter="FX_REVERB_WET_LEVEL"/>
+      </labeled-knob>
+      <labeled-knob x="520" y="60" width="90" label="Room" type="float" minValue="0" maxValue="1" value="0.5" textColor="FFF2E6D0" trackForegroundColor="FFC9A35C">
+        <binding type="effect" level="instrument" position="1" parameter="FX_REVERB_ROOM_SIZE"/>
+      </labeled-knob>
+    </tab>
+  </ui>
+  <groups attack="0.001" decay="0" sustain="1" release="0.8" ampVelTrack="0.7">
+    <group name="Single string" seqMode="random" seqLength="3">
+      <sample path="Samples/u0.wav" rootNote="48" loNote="45" hiNote="48" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u0.wav" rootNote="48" loNote="45" hiNote="48" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u0.wav" rootNote="48" loNote="45" hiNote="48" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/u1.wav" rootNote="49" loNote="49" hiNote="49" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u1.wav" rootNote="49" loNote="49" hiNote="49" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u1.wav" rootNote="49" loNote="49" hiNote="49" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/u2.wav" rootNote="50" loNote="50" hiNote="50" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u2.wav" rootNote="50" loNote="50" hiNote="50" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u2.wav" rootNote="50" loNote="50" hiNote="50" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/u3.wav" rootNote="51" loNote="51" hiNote="51" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u3.wav" rootNote="51" loNote="51" hiNote="51" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u3.wav" rootNote="51" loNote="51" hiNote="51" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/u4.wav" rootNote="52" loNote="52" hiNote="52" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u4.wav" rootNote="52" loNote="52" hiNote="52" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u4.wav" rootNote="52" loNote="52" hiNote="52" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d15.wav" rootNote="68" loNote="68" hiNote="68" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/d15.wav" rootNote="68" loNote="68" hiNote="68" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/d15.wav" rootNote="68" loNote="68" hiNote="68" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d16.wav" rootNote="69" loNote="69" hiNote="69" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/d16.wav" rootNote="69" loNote="69" hiNote="69" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/d16.wav" rootNote="69" loNote="69" hiNote="69" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d17.wav" rootNote="70" loNote="70" hiNote="70" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/d17.wav" rootNote="70" loNote="70" hiNote="70" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/d17.wav" rootNote="70" loNote="70" hiNote="70" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d18.wav" rootNote="71" loNote="71" hiNote="71" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/d18.wav" rootNote="71" loNote="71" hiNote="71" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/d18.wav" rootNote="71" loNote="71" hiNote="71" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d19.wav" rootNote="72" loNote="72" hiNote="76" tuning="0.0" volume="-1.9dB" seqPosition="1"/>
+      <sample path="Samples/d19.wav" rootNote="72" loNote="72" hiNote="76" tuning="0.05" volume="-2.5dB" seqPosition="2"/>
+      <sample path="Samples/d19.wav" rootNote="72" loNote="72" hiNote="76" tuning="-0.05" volume="-2.2dB" seqPosition="3"/>
+    </group>
+    <group name="Alternating" seqMode="random" seqLength="6">
+      <sample path="Samples/u5.wav" rootNote="53" loNote="53" hiNote="53" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u5.wav" rootNote="53" loNote="53" hiNote="53" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u5.wav" rootNote="53" loNote="53" hiNote="53" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d0.wav" rootNote="53" loNote="53" hiNote="53" tuning="0.0" volume="0.0dB" seqPosition="4"/>
+      <sample path="Samples/d0.wav" rootNote="53" loNote="53" hiNote="53" tuning="0.05" volume="-0.6dB" seqPosition="5"/>
+      <sample path="Samples/d0.wav" rootNote="53" loNote="53" hiNote="53" tuning="-0.05" volume="-0.3dB" seqPosition="6"/>
+      <sample path="Samples/u6.wav" rootNote="54" loNote="54" hiNote="54" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u6.wav" rootNote="54" loNote="54" hiNote="54" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u6.wav" rootNote="54" loNote="54" hiNote="54" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d1.wav" rootNote="54" loNote="54" hiNote="54" tuning="0.0" volume="0.0dB" seqPosition="4"/>
+      <sample path="Samples/d1.wav" rootNote="54" loNote="54" hiNote="54" tuning="0.05" volume="-0.6dB" seqPosition="5"/>
+      <sample path="Samples/d1.wav" rootNote="54" loNote="54" hiNote="54" tuning="-0.05" volume="-0.3dB" seqPosition="6"/>
+      <sample path="Samples/u7.wav" rootNote="55" loNote="55" hiNote="55" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u7.wav" rootNote="55" loNote="55" hiNote="55" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u7.wav" rootNote="55" loNote="55" hiNote="55" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d2.wav" rootNote="55" loNote="55" hiNote="55" tuning="0.0" volume="-4.5dB" seqPosition="4"/>
+      <sample path="Samples/d2.wav" rootNote="55" loNote="55" hiNote="55" tuning="0.05" volume="-5.1dB" seqPosition="5"/>
+      <sample path="Samples/d2.wav" rootNote="55" loNote="55" hiNote="55" tuning="-0.05" volume="-4.8dB" seqPosition="6"/>
+      <sample path="Samples/u8.wav" rootNote="56" loNote="56" hiNote="56" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u8.wav" rootNote="56" loNote="56" hiNote="56" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u8.wav" rootNote="56" loNote="56" hiNote="56" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d3.wav" rootNote="56" loNote="56" hiNote="56" tuning="0.0" volume="-1.3dB" seqPosition="4"/>
+      <sample path="Samples/d3.wav" rootNote="56" loNote="56" hiNote="56" tuning="0.05" volume="-1.9dB" seqPosition="5"/>
+      <sample path="Samples/d3.wav" rootNote="56" loNote="56" hiNote="56" tuning="-0.05" volume="-1.6dB" seqPosition="6"/>
+      <sample path="Samples/u9.wav" rootNote="57" loNote="57" hiNote="57" tuning="0.0" volume="-2.0dB" seqPosition="1"/>
+      <sample path="Samples/u9.wav" rootNote="57" loNote="57" hiNote="57" tuning="0.05" volume="-2.6dB" seqPosition="2"/>
+      <sample path="Samples/u9.wav" rootNote="57" loNote="57" hiNote="57" tuning="-0.05" volume="-2.3dB" seqPosition="3"/>
+      <sample path="Samples/d4.wav" rootNote="57" loNote="57" hiNote="57" tuning="0.0" volume="0.0dB" seqPosition="4"/>
+      <sample path="Samples/d4.wav" rootNote="57" loNote="57" hiNote="57" tuning="0.05" volume="-0.6dB" seqPosition="5"/>
+      <sample path="Samples/d4.wav" rootNote="57" loNote="57" hiNote="57" tuning="-0.05" volume="-0.3dB" seqPosition="6"/>
+      <sample path="Samples/u10.wav" rootNote="58" loNote="58" hiNote="58" tuning="0.0" volume="-5.4dB" seqPosition="1"/>
+      <sample path="Samples/u10.wav" rootNote="58" loNote="58" hiNote="58" tuning="0.05" volume="-6.0dB" seqPosition="2"/>
+      <sample path="Samples/u10.wav" rootNote="58" loNote="58" hiNote="58" tuning="-0.05" volume="-5.7dB" seqPosition="3"/>
+      <sample path="Samples/d5.wav" rootNote="58" loNote="58" hiNote="58" tuning="0.0" volume="0.0dB" seqPosition="4"/>
+      <sample path="Samples/d5.wav" rootNote="58" loNote="58" hiNote="58" tuning="0.05" volume="-0.6dB" seqPosition="5"/>
+      <sample path="Samples/d5.wav" rootNote="58" loNote="58" hiNote="58" tuning="-0.05" volume="-0.3dB" seqPosition="6"/>
+      <sample path="Samples/u11.wav" rootNote="59" loNote="59" hiNote="59" tuning="0.0" volume="-4.3dB" seqPosition="1"/>
+      <sample path="Samples/u11.wav" rootNote="59" loNote="59" hiNote="59" tuning="0.05" volume="-4.9dB" seqPosition="2"/>
+      <sample path="Samples/u11.wav" rootNote="59" loNote="59" hiNote="59" tuning="-0.05" volume="-4.6dB" seqPosition="3"/>
+      <sample path="Samples/d6.wav" rootNote="59" loNote="59" hiNote="59" tuning="0.0" volume="-1.5dB" seqPosition="4"/>
+      <sample path="Samples/d6.wav" rootNote="59" loNote="59" hiNote="59" tuning="0.05" volume="-2.1dB" seqPosition="5"/>
+      <sample path="Samples/d6.wav" rootNote="59" loNote="59" hiNote="59" tuning="-0.05" volume="-1.8dB" seqPosition="6"/>
+      <sample path="Samples/u12.wav" rootNote="60" loNote="60" hiNote="60" tuning="0.0" volume="-4.1dB" seqPosition="1"/>
+      <sample path="Samples/u12.wav" rootNote="60" loNote="60" hiNote="60" tuning="0.05" volume="-4.7dB" seqPosition="2"/>
+      <sample path="Samples/u12.wav" rootNote="60" loNote="60" hiNote="60" tuning="-0.05" volume="-4.4dB" seqPosition="3"/>
+      <sample path="Samples/d7.wav" rootNote="60" loNote="60" hiNote="60" tuning="0.0" volume="0.0dB" seqPosition="4"/>
+      <sample path="Samples/d7.wav" rootNote="60" loNote="60" hiNote="60" tuning="0.05" volume="-0.6dB" seqPosition="5"/>
+      <sample path="Samples/d7.wav" rootNote="60" loNote="60" hiNote="60" tuning="-0.05" volume="-0.3dB" seqPosition="6"/>
+      <sample path="Samples/u13.wav" rootNote="61" loNote="61" hiNote="61" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u13.wav" rootNote="61" loNote="61" hiNote="61" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u13.wav" rootNote="61" loNote="61" hiNote="61" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d8.wav" rootNote="61" loNote="61" hiNote="61" tuning="0.0" volume="-2.6dB" seqPosition="4"/>
+      <sample path="Samples/d8.wav" rootNote="61" loNote="61" hiNote="61" tuning="0.05" volume="-3.2dB" seqPosition="5"/>
+      <sample path="Samples/d8.wav" rootNote="61" loNote="61" hiNote="61" tuning="-0.05" volume="-2.9dB" seqPosition="6"/>
+      <sample path="Samples/u14.wav" rootNote="62" loNote="62" hiNote="62" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u14.wav" rootNote="62" loNote="62" hiNote="62" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u14.wav" rootNote="62" loNote="62" hiNote="62" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d9.wav" rootNote="62" loNote="62" hiNote="62" tuning="0.0" volume="-2.4dB" seqPosition="4"/>
+      <sample path="Samples/d9.wav" rootNote="62" loNote="62" hiNote="62" tuning="0.05" volume="-3.0dB" seqPosition="5"/>
+      <sample path="Samples/d9.wav" rootNote="62" loNote="62" hiNote="62" tuning="-0.05" volume="-2.7dB" seqPosition="6"/>
+      <sample path="Samples/u15.wav" rootNote="63" loNote="63" hiNote="63" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u15.wav" rootNote="63" loNote="63" hiNote="63" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u15.wav" rootNote="63" loNote="63" hiNote="63" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d10.wav" rootNote="63" loNote="63" hiNote="63" tuning="0.0" volume="0.0dB" seqPosition="4"/>
+      <sample path="Samples/d10.wav" rootNote="63" loNote="63" hiNote="63" tuning="0.05" volume="-0.6dB" seqPosition="5"/>
+      <sample path="Samples/d10.wav" rootNote="63" loNote="63" hiNote="63" tuning="-0.05" volume="-0.3dB" seqPosition="6"/>
+      <sample path="Samples/u16.wav" rootNote="64" loNote="64" hiNote="64" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u16.wav" rootNote="64" loNote="64" hiNote="64" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u16.wav" rootNote="64" loNote="64" hiNote="64" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d11.wav" rootNote="64" loNote="64" hiNote="64" tuning="0.0" volume="0.0dB" seqPosition="4"/>
+      <sample path="Samples/d11.wav" rootNote="64" loNote="64" hiNote="64" tuning="0.05" volume="-0.6dB" seqPosition="5"/>
+      <sample path="Samples/d11.wav" rootNote="64" loNote="64" hiNote="64" tuning="-0.05" volume="-0.3dB" seqPosition="6"/>
+      <sample path="Samples/u17.wav" rootNote="65" loNote="65" hiNote="65" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u17.wav" rootNote="65" loNote="65" hiNote="65" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u17.wav" rootNote="65" loNote="65" hiNote="65" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d12.wav" rootNote="65" loNote="65" hiNote="65" tuning="0.0" volume="0.0dB" seqPosition="4"/>
+      <sample path="Samples/d12.wav" rootNote="65" loNote="65" hiNote="65" tuning="0.05" volume="-0.6dB" seqPosition="5"/>
+      <sample path="Samples/d12.wav" rootNote="65" loNote="65" hiNote="65" tuning="-0.05" volume="-0.3dB" seqPosition="6"/>
+      <sample path="Samples/u18.wav" rootNote="66" loNote="66" hiNote="66" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u18.wav" rootNote="66" loNote="66" hiNote="66" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u18.wav" rootNote="66" loNote="66" hiNote="66" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d13.wav" rootNote="66" loNote="66" hiNote="66" tuning="0.0" volume="-0.7dB" seqPosition="4"/>
+      <sample path="Samples/d13.wav" rootNote="66" loNote="66" hiNote="66" tuning="0.05" volume="-1.3dB" seqPosition="5"/>
+      <sample path="Samples/d13.wav" rootNote="66" loNote="66" hiNote="66" tuning="-0.05" volume="-1.0dB" seqPosition="6"/>
+      <sample path="Samples/u19.wav" rootNote="67" loNote="67" hiNote="67" tuning="0.0" volume="0.0dB" seqPosition="1"/>
+      <sample path="Samples/u19.wav" rootNote="67" loNote="67" hiNote="67" tuning="0.05" volume="-0.6dB" seqPosition="2"/>
+      <sample path="Samples/u19.wav" rootNote="67" loNote="67" hiNote="67" tuning="-0.05" volume="-0.3dB" seqPosition="3"/>
+      <sample path="Samples/d14.wav" rootNote="67" loNote="67" hiNote="67" tuning="0.0" volume="-5.6dB" seqPosition="4"/>
+      <sample path="Samples/d14.wav" rootNote="67" loNote="67" hiNote="67" tuning="0.05" volume="-6.2dB" seqPosition="5"/>
+      <sample path="Samples/d14.wav" rootNote="67" loNote="67" hiNote="67" tuning="-0.05" volume="-5.9dB" seqPosition="6"/>
+    </group>
+    <group name="Body knock" seqMode="always">
+      <sample path="Samples/beat.wav" rootNote="36" loNote="36" hiNote="36" pitchKeyTrack="0" trigger="attack" loopEnabled="false"/>
+    </group>
+  </groups>
+  <effects>
+    <effect type="lowpass" frequency="22000"/>
+    <effect type="reverb" roomSize="0.5" damping="0.4" wetLevel="0.15"/>
+  </effects>
+</DecentSampler>

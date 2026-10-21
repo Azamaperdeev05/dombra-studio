@@ -1,0 +1,49 @@
+// Dombra Studio - Qagys: both strings at one fret, down/up strums alternate. Melody = lower string.
+// A=440, tuning baked into the samples. Velocity sets the volume only.
+<control> default_path=Samples/
+
+<global> ampeg_attack=0.001 ampeg_release=0.8 amp_veltrack=70 volume=-3 pitch_random=5 amp_random=0.6
+
+<region> sample=q0dn.wav lokey=53 hikey=53 pitch_keycenter=53 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q0up.wav lokey=53 hikey=53 pitch_keycenter=53 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q1dn.wav lokey=54 hikey=54 pitch_keycenter=54 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q1up.wav lokey=54 hikey=54 pitch_keycenter=54 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q2dn.wav lokey=55 hikey=55 pitch_keycenter=55 volume=-0.8 lorand=0.00 hirand=0.50
+<region> sample=q2up.wav lokey=55 hikey=55 pitch_keycenter=55 volume=-2.1 lorand=0.50 hirand=1.00
+<region> sample=q3dn.wav lokey=56 hikey=56 pitch_keycenter=56 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q3up.wav lokey=56 hikey=56 pitch_keycenter=56 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q4dn.wav lokey=57 hikey=57 pitch_keycenter=57 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q4up.wav lokey=57 hikey=57 pitch_keycenter=57 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q5dn.wav lokey=58 hikey=58 pitch_keycenter=58 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q5up.wav lokey=58 hikey=58 pitch_keycenter=58 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q6dn.wav lokey=59 hikey=59 pitch_keycenter=59 volume=-0.3 lorand=0.00 hirand=0.50
+<region> sample=q6up.wav lokey=59 hikey=59 pitch_keycenter=59 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q7dn.wav lokey=60 hikey=60 pitch_keycenter=60 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q7up.wav lokey=60 hikey=60 pitch_keycenter=60 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q8dn.wav lokey=61 hikey=61 pitch_keycenter=61 volume=-0.2 lorand=0.00 hirand=0.50
+<region> sample=q8up.wav lokey=61 hikey=61 pitch_keycenter=61 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q9dn.wav lokey=62 hikey=62 pitch_keycenter=62 volume=-0.2 lorand=0.00 hirand=0.50
+<region> sample=q9up.wav lokey=62 hikey=62 pitch_keycenter=62 volume=-2.0 lorand=0.50 hirand=1.00
+<region> sample=q10dn.wav lokey=63 hikey=63 pitch_keycenter=63 volume=-1.2 lorand=0.00 hirand=0.50
+<region> sample=q10up.wav lokey=63 hikey=63 pitch_keycenter=63 volume=-2.7 lorand=0.50 hirand=1.00
+<region> sample=q11dn.wav lokey=64 hikey=64 pitch_keycenter=64 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q11up.wav lokey=64 hikey=64 pitch_keycenter=64 volume=-1.8 lorand=0.50 hirand=1.00
+<region> sample=q12dn.wav lokey=65 hikey=65 pitch_keycenter=65 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q12up.wav lokey=65 hikey=65 pitch_keycenter=65 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q13dn.wav lokey=66 hikey=66 pitch_keycenter=66 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q13up.wav lokey=66 hikey=66 pitch_keycenter=66 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q14dn.wav lokey=67 hikey=67 pitch_keycenter=67 volume=-1.8 lorand=0.00 hirand=0.50
+<region> sample=q14up.wav lokey=67 hikey=67 pitch_keycenter=67 volume=-3.4 lorand=0.50 hirand=1.00
+<region> sample=q15dn.wav lokey=68 hikey=68 pitch_keycenter=68 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q15up.wav lokey=68 hikey=68 pitch_keycenter=68 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q16dn.wav lokey=69 hikey=69 pitch_keycenter=69 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q16up.wav lokey=69 hikey=69 pitch_keycenter=69 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q17dn.wav lokey=70 hikey=70 pitch_keycenter=70 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q17up.wav lokey=70 hikey=70 pitch_keycenter=70 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q18dn.wav lokey=71 hikey=71 pitch_keycenter=71 volume=0.0 lorand=0.00 hirand=0.50
+<region> sample=q18up.wav lokey=71 hikey=71 pitch_keycenter=71 volume=-1.5 lorand=0.50 hirand=1.00
+<region> sample=q19dn.wav lokey=72 hikey=72 pitch_keycenter=72 volume=-0.1 lorand=0.00 hirand=0.50
+<region> sample=q19up.wav lokey=72 hikey=72 pitch_keycenter=72 volume=-1.6 lorand=0.50 hirand=1.00
+
+// body knock (шанақ)
+<region> sample=beat.wav key=36 pitch_keytrack=0 loop_mode=one_shot
