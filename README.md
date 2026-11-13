@@ -9,7 +9,7 @@ DecentSampler · SFZ · MP3 note set · A = 440 Hz
 [![Code license](https://img.shields.io/badge/code-MIT-6c4a92)](LICENSE)
 [![Analysis](https://img.shields.io/badge/analysis-live%20report-1d1916)](https://azamaperdeev05.github.io/dombra-studio/)
 
-[Қазақша](#қазақша) · [Русский](#русский) · [English](#english)
+[Қазақша нұсқасы (README.kz.md)](README.kz.md) · [Қазақша](#қазақша) · [Русский](#русский) · [English](#english)
 
 | Бастапқы · Исходник · Original | Dombra Studio |
 |---|---|
